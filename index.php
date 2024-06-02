@@ -3,8 +3,8 @@
 Plugin Name: Custom Form Plugin
 Description: A custom form plugin that generates a PDF and sends form data to admin email.
 Version: 1.0
-Author: Your Name
-*/
+Author: AbdurRehman
+ */
 
 // Include the Composer autoload file
 require_once __DIR__ . '/vendor/autoload.php';
@@ -12,54 +12,56 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Dompdf\Dompdf;
 
 // Enqueue scripts and styles
-function custom_form_enqueue_scripts() {
+function custom_form_enqueue_scripts()
+{
     wp_enqueue_script('jquery');
 }
 add_action('wp_enqueue_scripts', 'custom_form_enqueue_scripts');
 
 // Shortcode to display the form
-function custom_form_shortcode() {
+function custom_form_shortcode()
+{
     ob_start();
     ?>
-    <form id="custom-form" method="post">
-        <label for="phone">Phone (Required):</label>
-        <input type="text" id="phone" name="phone" required><br><br>
+<form id="custom-form" method="post">
+    <label for="phone">Phone (Required):</label>
+    <input type="text" id="phone" name="phone" required><br><br>
 
-        <label for="email">Email (Required):</label>
-        <input type="email" id="email" name="email" required><br><br>
+    <label for="email">Email (Required):</label>
+    <input type="email" id="email" name="email" required><br><br>
 
-        <label for="address">Address (Required):</label>
-        <input type="text" id="address" name="address" required><br><br>
-        
-        <label for="address2">Address Line 2:</label>
-        <input type="text" id="address2" name="address2"><br><br>
-        
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" required><br><br>
+    <label for="address">Address (Required):</label>
+    <input type="text" id="address" name="address" required><br><br>
 
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" required><br><br>
+    <label for="address2">Address Line 2:</label>
+    <input type="text" id="address2" name="address2"><br><br>
 
-        <label for="zip">ZIP Code:</label>
-        <input type="text" id="zip" name="zip" required><br><br>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required><br><br>
 
-        <label for="dob">Date of Birth (Required):</label>
-        <input type="date" id="dob" name="dob" required><br><br>
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required><br><br>
 
-        <label for="party">Political Party Affiliation (Required):</label><br>
-        <input type="radio" id="independent" name="party" value="Independent" required>
-        <label for="independent">Independent</label><br>
-        <input type="radio" id="republican" name="party" value="Republican">
-        <label for="republican">Republican</label><br>
-        <input type="radio" id="democrat" name="party" value="Democrat">
-        <label for="democrat">Democrat</label><br>
-        <input type="radio" id="unaffiliated" name="party" value="Unaffiliated">
-        <label for="unaffiliated">Unaffiliated</label><br><br>
+    <label for="zip">ZIP Code:</label>
+    <input type="text" id="zip" name="zip" required><br><br>
 
-        <input type="submit" name="submit" value="Submit">
-    </form>
-    <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    <label for="dob">Date of Birth (Required):</label>
+    <input type="date" id="dob" name="dob" required><br><br>
+
+    <label for="party">Political Party Affiliation (Required):</label><br>
+    <input type="radio" id="independent" name="party" value="Independent" required>
+    <label for="independent">Independent</label><br>
+    <input type="radio" id="republican" name="party" value="Republican">
+    <label for="republican">Republican</label><br>
+    <input type="radio" id="democrat" name="party" value="Democrat">
+    <label for="democrat">Democrat</label><br>
+    <input type="radio" id="unaffiliated" name="party" value="Unaffiliated">
+    <label for="unaffiliated">Unaffiliated</label><br><br>
+
+    <input type="submit" name="submit" value="Submit">
+</form>
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         custom_form_handle_submission();
     }
     return ob_get_clean();
@@ -67,8 +69,11 @@ function custom_form_shortcode() {
 add_shortcode('custom_form', 'custom_form_shortcode');
 
 // Handle form submission
-function custom_form_handle_submission() {
-    if (!isset($_POST['submit'])) return;
+function custom_form_handle_submission()
+{
+    if (!isset($_POST['submit'])) {
+        return;
+    }
 
     // Validate and sanitize form inputs
     $phone = sanitize_text_field($_POST['phone']);
@@ -109,7 +114,7 @@ function custom_form_handle_submission() {
     // Generate CSV content
     $csv_content = [
         ['Phone', 'Email', 'Address', 'Address Line 2', 'City', 'State', 'ZIP Code', 'Date of Birth', 'Political Party Affiliation'],
-        [$phone, $email, $address, $address2, $city, $state, $zip, $dob, $party]
+        [$phone, $email, $address, $address2, $city, $state, $zip, $dob, $party],
     ];
     $csv_file_path = $upload_dir['path'] . '/form-submission.csv';
     $file = fopen($csv_file_path, 'w');
